@@ -1,0 +1,26 @@
+{
+  "name": "remixjob-api",
+  "version": "10.3.1",
+  "description": "An amazing API module for RemixJob, because coding is Apiness",
+  "author": "Kelvin HADO <https://github.com/kelvinhado>",
+
+  "main": "server.js",
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/kelvinhado/remixjobs"
+},
+  "keywords": [
+  "remixjob",
+  "api",
+  "rest-api"
+],
+  "dependencies": {
+    "cheerio": "0.19.0",
+    "express": "4.0.0",
+    "fs": "*",
+    "path": "0.12.7",
+    "body-parser": "1.14.1",
+    "request" : "*"
+  },
+  "license": "UNLICENSED"
+}
