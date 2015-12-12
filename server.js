@@ -44,21 +44,39 @@ app.get('/scrap', function(req, res) {
                              id : "",
                              title : "",
                              company : "",
-                             localization: "",
-                             category : "",
-                             description :"",
+                             localization: {
+                                data_workplace_name: "",
+                                data_workplace_lat: 0.0,
+                                data_workplace_lng: 0.0
+                             },
+                             //category : "",
+                             //description :"",
                              contract :"",
                              date : "",
-                             tags: ""};
+                             tags: []
+                           };
+
+                   //date formating if today (we do not want "il y a 3 heures")
+                   var item_date = $('.job-details-right', this).text();
+                   if(item_date.indexOf("heures") > -1) {
+                     item_date = Date.now();
+                   }
+                   //adding tags to the json
+                   var item_tags = [];
+                   $('.job-tags .tag', this).each(function(i, elem) {
+                     item_tags.push($(this).attr('data-tag-name'));
+                   });
+
 
                   json_job.id  = $(this).attr('data-job-id');
-                  json_job.title = ($('.job-title', this).text()).replace(/(\r\n|\n|\r)/gm," ").replace(/^\s+|\s+$/g, "");
+                  json_job.title = ($('.job-title', this).text()).replace(/(\r\n|\n|\r)/gm," ").replace(/^\s+|\s+$/g, ""); // text cleaned from extra /n and spaces
                   json_job.company = $('.company', this).text();
-                  json_job.localization = $('.workplace', this).text();
+                  json_job.localization.data_workplace_name = $('.workplace', this).attr('data-workplace-name');
+                  json_job.localization.data_workplace_lat = $('.workplace', this).attr('data-workplace-lat');
+                  json_job.localization.data_workplace_lng = $('.workplace', this).attr('data-workplace-lng');
                   json_job.contract = $('.contract', this).attr('data-contract-type');
-                //  json_job.date = $('.workplace a', this).text();
-                //  json_job.category = $('.workplace a', this).text();
-                //  json_job.tags = $('.workplace a', this).text();
+                  json_job.date = item_date;
+                  json_job.tags = item_tags;
 
                 data.records.push(json_job);
 
