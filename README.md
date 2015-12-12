@@ -8,6 +8,18 @@
 
 Today, no (un)official API was developed to allow developers to add jobs in their web application
 
+## What is a REST API ?
+
+Rest stand for Representational State Transfer (REST)  
+* Use HTTP methods explicitly.
+* Be stateless : “don't store state information on the server”
+* Expose directory structure-like URIs.
+* Transfer XML, JavaScript Object Notation (JSON), or both
+
+
+
+
+
 ## Workshop in 1 sentence
 
 *Build a remixjobs RESTful API*
