@@ -26,7 +26,7 @@ app.get('/', function (req, res) {
 
 app.get('/scrap', function(req, res) {
 
-  scrapper.scrappRemixJob(5,function(hits){
+  scrapper.scrappRemixJob(2,function(hits){
     res.write("done. " + hits.toString() + " jobs found");
     res.end();
   }); // end scrappRemixJob
