@@ -1,15 +1,18 @@
 var   express = require('express'),
-      fs = require('fs'),
-      cheerio = require('cheerio'),
-      request = require('request'),
       path = require('path'),
       bodyParser = require('body-parser'),
       scrapper = require("./remixjob-scrapper"),
       app = express();
-
-
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// custom parameters
+var number_of_pages_to_scrap = 5;
+
+/** ** ** ** ** ** **/
+/** API GET /POST   */
+/** ** ** ** ** ** **/
+
 
 app.get('/api/v1/jobs', function (req, res) {
   res.write("list of jobs");
@@ -25,8 +28,8 @@ app.get('/', function (req, res) {
 
 
 app.get('/scrap', function(req, res) {
-
-  scrapper.scrappRemixJob(2,function(hits){
+  var nbPages = number_of_pages_to_scrap;
+  scrapper.scrappRemixJob(nbPages,function(hits){
     res.write("done. " + hits.toString() + " jobs found");
     res.end();
   }); // end scrappRemixJob

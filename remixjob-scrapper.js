@@ -7,7 +7,7 @@ var   fs = require('fs'),
   * @nbPages : number or pages to scrapp
   * return : number of jobs scrapped
 */
-var remixUrl = "https://remixjobs.com/";
+var remixUrl = "https://remixjobs.com";
 
 exports.scrappRemixJob = function(nbPages, exportCallback) {
 
@@ -25,25 +25,23 @@ exports.scrappRemixJob = function(nbPages, exportCallback) {
              next(error, jsonResult);
       }); // end request
   }, function(error, jsonResults) { //jsonResults (with s) contain all the results
+
     // merging results
     // we do have n table of results inside jsonResults, let's merge them all
-    var jsonResultMerged = { results : [] };
-    for(var i = 0; i < nbPages; i++) {
-       jsonResultMerged.results.push(jsonResults[i]);
-    }
+      for(var i=1; i<jsonResults.length; i++) {
+        jsonResults[0] = jsonResults[0].concat(jsonResults[i]);
+      }
 
-
-  //  fs.writeFileSync('./data.json', JSON.stringify(data));
-   console.log(jsonResults.length);
-   console.log(jsonResultMerged.length);
-    exportCallback("x");
-      });
+       data.records = jsonResults[0];
+       fs.writeFileSync('./data.json', JSON.stringify(data));
+       exportCallback(data.records.length);
+    });
 
 }; // end exports.scrappRemixJob
 
 
 function generateUrl(page) {
-  return remixUrl + "?page=" + page + "&in=all";
+  return remixUrl + "/?page=" + page + "&in=all";
 }
 
 /**
@@ -60,6 +58,7 @@ function scrappHtml(html){
                        id : "",
                        title : "",
                        company : "",
+                       url: "",
                        localization: {
                           data_workplace_name: "",
                           data_workplace_lat: 0.0,
@@ -82,9 +81,12 @@ function scrappHtml(html){
              });
              //clean the job title field
              var item_title = ($('.job-title', this).text()).replace(/(\r\n|\n|\r)/gm," ").replace(/^\s+|\s+$/g, "");
+             // build job url base on rmx domain
+             var item_url = remixUrl + $('.job-link', this).attr('href');
 
             json_job.id  = $(this).attr('data-job-id');
             json_job.title = item_title;
+            json_job.url = item_url;
             json_job.company = $('.company', this).text();
             json_job.localization.data_workplace_name = $('.workplace', this).attr('data-workplace-name');
             json_job.localization.data_workplace_lat = $('.workplace', this).attr('data-workplace-lat');
