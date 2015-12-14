@@ -13,7 +13,7 @@ mongoose.connect('mongodb://localhost/db-remixjob'); // connect to our database
 
 
 app.get('/scrap', function(req, res) {
-  var nbPages = 3;
+  var nbPages = 40;
   scrapper.scrappRemixJob(nbPages,function(hits){
     res.write("done. " + hits.toString() + " jobs found");
     res.end();
@@ -60,7 +60,17 @@ router.route('/jobs')
 
             res.json(jobs);
         });
+});
+
+router.route('/jobs/:job_id')
+    // get the job with that id (accessed at GET http://localhost:8080/api/jobs/:job_id)
+    .get(function(req, res) {
+        Job.findOne({id: req.params.job_id}, function(err, job) {
+            if (err)
+                res.send(err);
+            res.json(job);
     });
+});
 
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
