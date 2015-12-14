@@ -25,13 +25,19 @@ Then use PostMan to try out the API
 #### Import data
 
 - to fill out the local database with remixjobs data :
+ ```
   GET : http://localhost:9292/scrap
+  ```
 
 - to see all jobs
+  ```
   GET : http://localhost:9292/api/v1/jobs
+  ```
 
 - add a new job
-  POST http://localhost:9292/api/v1/jobs with data from form (x-www-form-urlencoded)
+  ```
+  POST http://localhost:9292/api/v1/jobs
+  ```
   *request exemple*
   ```
   POST /api/v1/jobs HTTP/1.1
