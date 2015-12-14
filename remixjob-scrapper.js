@@ -1,7 +1,8 @@
 var   fs = require('fs'),
       cheerio = require('cheerio'),
       request = require('request'),
-      async = require('async');
+      async = require('async'),
+      Job = require('./remixjob-model');
 
 /** parameters
   * @nbPages : number or pages to scrapp
@@ -84,18 +85,37 @@ function scrappHtml(html){
              // build job url base on rmx domain
              var item_url = remixUrl + $('.job-link', this).attr('href');
 
-            json_job.id  = $(this).attr('data-job-id');
-            json_job.title = item_title;
-            json_job.url = item_url;
-            json_job.company = $('.company', this).text();
-            json_job.localization.data_workplace_name = $('.workplace', this).attr('data-workplace-name');
-            json_job.localization.data_workplace_lat = $('.workplace', this).attr('data-workplace-lat');
-            json_job.localization.data_workplace_lng = $('.workplace', this).attr('data-workplace-lng');
-            json_job.contract = $('.contract', this).attr('data-contract-type');
-            json_job.date = item_date;
-            json_job.tags = item_tags;
+            // json_job.id  = $(this).attr('data-job-id');
+            // json_job.title = item_title;
+            // json_job.url = item_url;
+            // json_job.company = $('.company', this).text();
+            // json_job.localization.data_workplace_name = $('.workplace', this).attr('data-workplace-name');
+            // json_job.localization.data_workplace_lat = $('.workplace', this).attr('data-workplace-lat');
+            // json_job.localization.data_workplace_lng = $('.workplace', this).attr('data-workplace-lng');
+            // json_job.contract = $('.contract', this).attr('data-contract-type');
+            // json_job.date = item_date;
+            // json_job.tags = item_tags;
 
-          jsonResult.push(json_job);
+
+                      var job = new Job();
+                      job.id  = $(this).attr('data-job-id');
+                      job.title = item_title;
+                      job.url = item_url;
+                      job.company = $('.company', this).text();
+                      job.localization.data_workplace_name = $('.workplace', this).attr('data-workplace-name');
+                      job.localization.data_workplace_lat = $('.workplace', this).attr('data-workplace-lat');
+                      job.localization.data_workplace_lng = $('.workplace', this).attr('data-workplace-lng');
+                      job.contract = $('.contract', this).attr('data-contract-type');
+                      job.date = item_date;
+                      job.tags = item_tags;
+                      // save the bear and check for errors
+                      job.save(function(err) {
+                          if (err)
+                              console.log(err);
+                      });
+
+
+        //  jsonResult.push(json_job);
         }); //end for each job_item in list
-        return jsonResult;
+        return "xx";
 }
