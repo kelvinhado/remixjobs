@@ -5,8 +5,9 @@ var Job        = require('./remixjob-model');
 var scrapper   = require("./remixjob-scrapper");
 // configure app to use bodyParser()
 // this will let us get the data from a POST
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 var mongoose   = require('mongoose');
 mongoose.connect('mongodb://localhost/db-remixjob'); // connect to our database
@@ -40,16 +41,25 @@ router.route('/jobs')
 
     // create a job (accessed at POST http://localhost:9292/api/jobs)
     .post(function(req, res) {
-        // var job = new Job();      // create a new instance of the Bear model
-        // job.id= req.body.id;  // set the bears name (comes from the request)
-        //
-        // // save the bear and check for errors
-        // job.save(function(err) {
-        //     if (err)
-        //         res.send(err);
-        //
-        //     res.json({ message: 'Job created!' });
-        // });
+        var job = new Job();      // create a new instance of the Bear model
+        //job.id= req.body.id;
+        job.title = req.body.title;
+        job.url = req.body.url;
+        job.company = req.body.company;
+        job.localization.data_workplace_name = req.body.workplace_name;
+        job.localization.data_workplace_lat = req.body.workplace_lat;
+        job.localization.data_workplace_lng = req.body.workplace_lng;
+        job.contract = req.body.contract;
+        job.date = Date.now();
+        job.tags = (req.body.tags).split(",");
+
+
+        job.save(function(err) {
+            if (err)
+                res.send(err);
+
+            res.json({ message: 'Job #'+job.title+' created!' });
+        });
     })
 
     // get all the jobs (accessed at GET http://localhost:9292/api/jobs)
@@ -68,6 +78,7 @@ router.route('/jobs/:job_id')
         Job.findOne({id: req.params.job_id}, function(err, job) {
             if (err)
                 res.send(err);
+
             res.json(job);
     });
 });
