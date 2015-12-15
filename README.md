@@ -45,33 +45,79 @@ Etc, etc, etc...
 
 ## Api description
 
-We could define a job by its
+*Json exemple*
 
-1. Job title
-1. Company
-1. Localization
-1. Category
-1. Description
-1. Contract
-1. Date
-1. Tags
-
-### /jobs
-
-* Return all jobs
-* Create a new job
-* Return information of a job
-* Update a jobs
-
-#### Non exhaustive parameters
+#### Available parameters
 
 parameters | description
 ---------- | -----------
-q | the query
-contract | filter by contract (cdi, cdd...)
-category | design, dev...
-where | localization
-limit | Jobs number
+id | (Number) the id of the job
+title | (String) title
+url | (String) link to the job
+company | (String) name of the company
+place | (String) localization
+contract | (String) Type of the contract (CDD, Stage..)
+tags  | (String) filters by tags
+
+### /jobs
+
+* **Return all jobs**
+You can add parameters to the request to sort your results
+```
+GET : http://localhost:9292/api/v1/jobs
+GET : http://localhost:9292/api/v1/jobs?company=Google
+```
+
+* **Create a new job**
+```
+POST : http://localhost:9292/api/v1/jobs
+```
+with POST parameters from form
+
+```
+POST /api/v1/jobs HTTP/1.1
+Host: localhost:9292
+Cache-Control: no-cache
+Postman-Token: feeff084-b6da-6fd7-0ab0-d665c05663ef
+Content-Type: application/x-www-form-urlencoded
+
+title=Awesome+Job&company=Google&url=http%3A%2F%2Fremixjob.com%2FAwesomeJob%2F808080&workplace_name=Los+Angeles&workplace_lat=34.052235&workplace_lng=-118.243683&contract=CDI&tags=AngularJS%2CHTML
+```
+
+* **Return information of a job**
+```
+GET : http://localhost:9292/api/v1/jobs/33680
+```
+```
+{
+    "_id": "5670057d37946bd307b7d8e1",
+    "date": "1450182013809",
+    "contract": "Stage",
+    "company": "Alxdr",
+    "url": "https://remixjobs.com/emploi/Developpement/Developpeur-Ruby-on-Rails-logiciel-SaaS-H-F/33680",
+    "title": "Développeur Ruby on Rails (logiciel SaaS) H/F",
+    "id": 33680,
+    "__v": 0,
+    "tags": [
+      "ruby-on-rails",
+      "ruby",
+      "saas",
+      "ror",
+      "B2B"
+    ],
+    "localization": {
+      "data_workplace_lng": 2.3425712,
+      "data_workplace_lat": 48.8717774,
+      "data_workplace_name": "Paris"
+    }
+}
+```
+
+* **Update a jobs**
+```
+PUT : http://localhost:9292/api/v1/jobs/{id}
+```
+
 
 ### /jobs/latest
 
@@ -88,6 +134,7 @@ I think that the first step is to scrap datas from RemixJobs website and fill a 
 
 Once database filled, your api will fetch/save/update data from this database in a real API consuming.
 
+You can find the model in the the file **remixjob-model.js**
 
 ## API rules (at least to follow)
 
