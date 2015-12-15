@@ -14,7 +14,7 @@ mongoose.connect('mongodb://localhost/db-remixjob'); // connect to our database
 
 
 app.get('/scrap', function(req, res) {
-  var nbPages = 40;
+  var nbPages = 2;
   scrapper.scrappRemixJob(nbPages,function(hits){
     res.write("done. " + hits.toString() + " jobs found");
     res.end();
@@ -42,7 +42,7 @@ router.route('/jobs')
     // create a job (accessed at POST http://localhost:9292/api/jobs)
     .post(function(req, res) {
         var job = new Job();      // create a new instance of the Bear model
-        //job.id= req.body.id;
+        job.id= Date.now();
         job.title = req.body.title;
         job.url = req.body.url;
         job.company = req.body.company;
@@ -53,20 +53,22 @@ router.route('/jobs')
         job.date = Date.now();
         job.tags = (req.body.tags).split(",");
 
-
         job.save(function(err) {
             if (err)
                 res.send(err);
 
-            res.json({ message: 'Job #'+job.title+' created!' });
+            res.json({ message: 'Job "'+job.title+'" created!' });
         });
     })
-
     // get all the jobs (accessed at GET http://localhost:9292/api/jobs)
     .get(function(req, res) {
-        Job.find(function(err, jobs) {
-            if (err)
-                res.send(err);
+
+        Job.find(req.query, function(err, jobs) {
+            if (err) {
+               console.log(err);
+               res.send(err);
+            }
+
 
             res.json(jobs);
         });
@@ -74,6 +76,31 @@ router.route('/jobs')
 
 router.route('/jobs/:job_id')
     // get the job with that id (accessed at GET http://localhost:8080/api/jobs/:job_id)
+    // to update a specific job
+    .put(function(req, res) {
+      Job.findOne({id: req.params.job_id}, function(err, job) {
+          if (err)
+              res.send(err);
+            job.id= Date.now();
+            job.title = req.body.title;
+            job.url = req.body.url;
+            job.company = req.body.company;
+            job.localization.data_workplace_name = req.body.workplace_name;
+            job.localization.data_workplace_lat = req.body.workplace_lat;
+            job.localization.data_workplace_lng = req.body.workplace_lng;
+            job.contract = req.body.contract;
+            job.date = Date.now();
+            job.tags = (req.body.tags).split(",");
+
+            job.save(function(err) {
+              if (err)
+                     res.send(err);
+
+                 res.json({ success : true,  message: 'job updated successfully!' });
+             });
+        });
+
+    })
     .get(function(req, res) {
         Job.findOne({id: req.params.job_id}, function(err, job) {
             if (err)
