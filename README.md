@@ -46,6 +46,31 @@ Etc, etc, etc...
 ## Api description
 
 *Json exemple*
+```
+{
+  "_id": "5670057d37946bd307b7d8fa",
+  "date": "11 déc. 2015",
+  "contract": "CDI",
+  "company": "Mallinki",
+  "url": "https://remixjobs.com/emploi/Developpement/Developpeur-Symfony2-H-F/33657",
+  "title": "Développeur Symfony2 H/F",
+  "id": 33657,
+  "__v": 0,
+  "tags": [
+    "php",
+    "symfony2",
+    "elasticsearch",
+    "docker",
+    "Behat"
+  ],
+  "localization": {
+    "data_workplace_lng": 2.335969,
+    "data_workplace_lat": 48.870082,
+    "data_workplace_name": "Paris"
+  }
+}
+```
+
 
 #### Available parameters
 
